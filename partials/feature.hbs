@@ -1,0 +1,88 @@
+<div class="relative z-100 flex h-screen flex-col-reverse overflow-hidden">
+  <img
+    id="feature-image"
+    src="assets/images/bangkokrailfeature.jpg"
+    class="absolute object-cover h-full w-full inset-0 -z-10"
+  />
+  <svg class="absolute bottom-0 right-0 mb-10 mr-10 h-32 sm:mb-20 sm:mr-20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#FFFFFF" version="1.1" id="Layer_1" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+  <polygon points="289.7,341.3 289.7,0 204.3,0 204.3,341.3 33.7,170.7 33.7,298.7 247,512 460.3,298.7 460.3,170.7 "/>
+  </svg>
+
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+    <path d="M13 17.586V4h-2v13.586l-6.293-6.293-1.414 1.414L12 21.414l8.707-8.707-1.414-1.414L13 17.586z"/>
+  </svg>
+  
+  <div
+    class="flex flex-col text-5xl sm:text-[5.25rem] font-bold m-14 sm:m-32 text-white"
+  >
+    <h1
+      data-image="assets/images/bangkokrailfeature.jpg"
+      class="mb-0 hover:text-white/70"
+    ><a href="/bangkok-rail" class="cursor-pointer">Bangkok-Rail</a></h1>
+    <h1
+      data-image="assets/images/munibusfeature.jpg"
+      class="mb-0 hover:text-white/70"
+    ><a href="/muni-bus" class="cursor-pointer">Muni Bus</a></h1>
+    <h1
+      data-image="assets/images/covalleyfeature.png"
+      class="mb-0 hover:text-white/70"
+    ><a href="/am-i-online" class="cursor-pointer">CO Valley</a></h1>
+    <h1
+      data-image="assets/images/cc16feature.jpg"
+      class="mb-0 hover:text-white/70"
+    ><a href="/cc16-personality-quiz" class="cursor-pointer">CC16 Quiz</a></h1>
+  </div>
+</div>
+
+<script>
+  const featureImage = document.getElementById("feature-image");
+  const titles = document.querySelectorAll("[data-image]");
+  const imagePaths = Array.from(titles).map(el => el.dataset.image);
+
+  // Preload all images
+  imagePaths.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
+  let currentIndex = 0;
+  let loopTimeout;
+
+  // --- Highlight active title ---
+  function highlightTitle(index) {
+    titles.forEach((t, i) => {
+      t.style.color = i === index ? "rgba(255, 255, 255, 0.7)" : "white";
+    });
+  }
+
+  // --- Change background image ---
+  function changeImage(index) {
+    currentIndex = index;
+    featureImage.src = imagePaths[index];
+    highlightTitle(index);
+  }
+
+  // --- Auto-loop ---
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % imagePaths.length;
+    changeImage(currentIndex);
+    startLoop();
+  }
+
+  function startLoop() {
+    clearTimeout(loopTimeout);
+    loopTimeout = setTimeout(nextImage, 5000); // 5s idle
+  }
+
+  // --- Hover events ---
+  titles.forEach((title, index) => {
+    title.addEventListener("mouseenter", () => {
+      changeImage(index);
+      startLoop(); // reset idle timer
+    });
+  });
+
+  // Initialize
+  highlightTitle(currentIndex);
+  startLoop();
+</script>
